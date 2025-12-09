@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Download Outgrowth</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Download will begin shortly...</h1>
+  <p>If it doesn't start automatically, <a id="manualLink" href="#">click here</a>.</p>
+
+  <script>
+    // Helper to get query params
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    const platform = getQueryParam('platform');
+    if (!platform) {
+      alert("Missing 'platform' query parameter (mac or windows)");
+    } else {
+      // TODO: Replace with heroku
+      fetch(`http://localhost:3000/api/payload?platform=${encodeURIComponent(platform)}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.url) {
+            // Set the manual link
+            const link = document.getElementById('manualLink');
+            link.href = data.url;
+            link.download = data.filename;
+
+            // Auto-start download
+            window.location.href = data.url;
+          } else if (data.error) {
+            alert("Error: " + data.error);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Failed to get download link.");
+        });
+    }
+  </script>
+</body>
+</html>
