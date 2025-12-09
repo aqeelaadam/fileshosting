@@ -31,8 +31,7 @@
     if (!platform) {
       alert("Missing 'platform' query parameter (mac or windows)");
     } else {
-      // TODO: Replace with heroku
-      fetch(`http://localhost:3000/api/payload?platform=${encodeURIComponent(platform)}`)
+      fetch(`https://aqeel-aadam-sound-1787ee015aa8.herokuapp.com/api/payload?platform=${encodeURIComponent(platform)}`)
         .then(r => r.json())
         .then(data => {
           if (data.url) {
